@@ -1686,7 +1686,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_F918B665DF9F41118E912D81C87498CA"
             {
-            "SourcePath" = "8:..\\Birometric Entrance Record System\\obj\\Debug\\Birometric Entrance Record System.exe"
+            "SourcePath" = "8:..\\Biometric Entrance Record System\\obj\\Debug\\Biometric Entrance Record System.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_957F0931101A449C93C9BE152C2608AE"

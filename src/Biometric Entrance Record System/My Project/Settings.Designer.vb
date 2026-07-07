@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
 
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")> _
-        Friend ReadOnly Property Settings() As Global.Birometric_Entrance_Record_System.My.MySettings
+        Friend ReadOnly Property Settings() As Global.Biometric_Entrance_Record_System.My.MySettings
             Get
-                Return Global.Birometric_Entrance_Record_System.My.MySettings.Default
+                Return Global.Biometric_Entrance_Record_System.My.MySettings.Default
             End Get
         End Property
     End Module

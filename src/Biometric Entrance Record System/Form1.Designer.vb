@@ -121,6 +121,9 @@ Partial Class Form1
         Me.SerialPort1 = New System.IO.Ports.SerialPort(Me.components)
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.PanelContainer = New System.Windows.Forms.Panel()
+        Me.PanelNo = New System.Windows.Forms.Panel()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.PictureBox12 = New System.Windows.Forms.PictureBox()
         Me.PictureBoxStatusConnect = New System.Windows.Forms.PictureBox()
         Me.PanelAboutUs = New System.Windows.Forms.Panel()
         Me.Panel10 = New System.Windows.Forms.Panel()
@@ -257,7 +260,7 @@ Partial Class Form1
         Me.ButtonAboutUs.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonAboutUs.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonAboutUs.ForeColor = System.Drawing.Color.SteelBlue
-        Me.ButtonAboutUs.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources.about_us_icon_15
+        Me.ButtonAboutUs.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources.about_us_icon_15
         Me.ButtonAboutUs.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonAboutUs.Location = New System.Drawing.Point(3, 560)
         Me.ButtonAboutUs.Name = "ButtonAboutUs"
@@ -273,7 +276,7 @@ Partial Class Form1
         Me.ButtonReport.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonReport.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonReport.ForeColor = System.Drawing.Color.SteelBlue
-        Me.ButtonReport.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._5027835_analytics_chart_graph_statistics_icon__1_
+        Me.ButtonReport.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._5027835_analytics_chart_graph_statistics_icon__1_
         Me.ButtonReport.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonReport.Location = New System.Drawing.Point(3, 490)
         Me.ButtonReport.Name = "ButtonReport"
@@ -339,7 +342,7 @@ Partial Class Form1
         Me.ButtonRegistration.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonRegistration.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonRegistration.ForeColor = System.Drawing.Color.SteelBlue
-        Me.ButtonRegistration.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._9024009_user_circle_plus_fill_icon
+        Me.ButtonRegistration.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._9024009_user_circle_plus_fill_icon
         Me.ButtonRegistration.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonRegistration.Location = New System.Drawing.Point(3, 420)
         Me.ButtonRegistration.Name = "ButtonRegistration"
@@ -356,7 +359,7 @@ Partial Class Form1
         Me.ButtonUserData.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonUserData.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonUserData.ForeColor = System.Drawing.Color.SteelBlue
-        Me.ButtonUserData.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._9024006_user_circle_fill_icon
+        Me.ButtonUserData.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._9024006_user_circle_fill_icon
         Me.ButtonUserData.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonUserData.Location = New System.Drawing.Point(3, 280)
         Me.ButtonUserData.Name = "ButtonUserData"
@@ -372,7 +375,7 @@ Partial Class Form1
         Me.ButtonConnection.FlatStyle = System.Windows.Forms.FlatStyle.Flat
         Me.ButtonConnection.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.ButtonConnection.ForeColor = System.Drawing.Color.SteelBlue
-        Me.ButtonConnection.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._2024657_cable_usb_icon
+        Me.ButtonConnection.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._2024657_cable_usb_icon
         Me.ButtonConnection.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
         Me.ButtonConnection.Location = New System.Drawing.Point(3, 210)
         Me.ButtonConnection.Name = "ButtonConnection"
@@ -383,7 +386,7 @@ Partial Class Form1
         '
         'PictureBox1
         '
-        Me.PictureBox1.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources.FB_IMG_1687753628437_removebg_preview__1_
+        Me.PictureBox1.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources.FB_IMG_1687753628437_removebg_preview__1_
         Me.PictureBox1.Location = New System.Drawing.Point(20, 44)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(117, 133)
@@ -431,6 +434,8 @@ Partial Class Form1
         Me.PanelConnection.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.PanelConnection.Controls.Add(Me.Label48)
         Me.PanelConnection.Controls.Add(Me.PictureBox11)
+        Me.PanelConnection.Controls.Add(Me.Label44)
+        Me.PanelConnection.Controls.Add(Me.PictureBox12)
         Me.PanelConnection.Controls.Add(Me.ButtonConnect)
         Me.PanelConnection.Controls.Add(Me.ComboBoxBaudRate)
         Me.PanelConnection.Controls.Add(Me.Label1)
@@ -832,28 +837,28 @@ Partial Class Form1
         '
         'DeleteToolStripMenuItem
         '
-        Me.DeleteToolStripMenuItem.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._2202256_bin_cancel_delete_garbage_recycle_icon
+        Me.DeleteToolStripMenuItem.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._2202256_bin_cancel_delete_garbage_recycle_icon
         Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
         Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
         Me.DeleteToolStripMenuItem.Text = "Delete"
         '
         'SelectAllToolStripMenuItem
         '
-        Me.SelectAllToolStripMenuItem.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._326691_all_select_icon
+        Me.SelectAllToolStripMenuItem.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._326691_all_select_icon
         Me.SelectAllToolStripMenuItem.Name = "SelectAllToolStripMenuItem"
         Me.SelectAllToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
         Me.SelectAllToolStripMenuItem.Text = "Select  All "
         '
         'ClearSelectionToolStripMenuItem
         '
-        Me.ClearSelectionToolStripMenuItem.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._326558_blank_check_box_icon
+        Me.ClearSelectionToolStripMenuItem.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._326558_blank_check_box_icon
         Me.ClearSelectionToolStripMenuItem.Name = "ClearSelectionToolStripMenuItem"
         Me.ClearSelectionToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
         Me.ClearSelectionToolStripMenuItem.Text = "Clear Selection"
         '
         'RefreshToolStripMenuItem
         '
-        Me.RefreshToolStripMenuItem.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._186390_refresh_sync_icon__4_
+        Me.RefreshToolStripMenuItem.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._186390_refresh_sync_icon__4_
         Me.RefreshToolStripMenuItem.Name = "RefreshToolStripMenuItem"
         Me.RefreshToolStripMenuItem.Size = New System.Drawing.Size(181, 26)
         Me.RefreshToolStripMenuItem.Text = "Refresh"
@@ -1040,7 +1045,7 @@ Partial Class Form1
         '
         'ButtonCloseReadingTag
         '
-        Me.ButtonCloseReadingTag.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._216468_close_icon__1_1
+        Me.ButtonCloseReadingTag.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._216468_close_icon__1_1
         Me.ButtonCloseReadingTag.Location = New System.Drawing.Point(231, 3)
         Me.ButtonCloseReadingTag.Name = "ButtonCloseReadingTag"
         Me.ButtonCloseReadingTag.Size = New System.Drawing.Size(30, 27)
@@ -1211,7 +1216,7 @@ Partial Class Form1
         '
         'PictureBoxImageInput
         '
-        Me.PictureBoxImageInput.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._186390_refresh_sync_icon__2_
+        Me.PictureBoxImageInput.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._186390_refresh_sync_icon__2_
         Me.PictureBoxImageInput.Location = New System.Drawing.Point(10, 22)
         Me.PictureBoxImageInput.Name = "PictureBoxImageInput"
         Me.PictureBoxImageInput.Size = New System.Drawing.Size(100, 100)
@@ -1307,6 +1312,7 @@ Partial Class Form1
         Me.PanelContainer.Controls.Add(Me.PanelRecord)
         Me.PanelContainer.Controls.Add(Me.PanelConnection)
         Me.PanelContainer.Controls.Add(Me.PanelRegisterationandEditUserData)
+        Me.PanelContainer.Controls.Add(Me.PanelNo)
         Me.PanelContainer.Location = New System.Drawing.Point(0, 41)
         Me.PanelContainer.Name = "PanelContainer"
         Me.PanelContainer.Size = New System.Drawing.Size(980, 664)
@@ -1314,7 +1320,7 @@ Partial Class Form1
         '
         'PictureBoxStatusConnect
         '
-        Me.PictureBoxStatusConnect.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources.Disconnect
+        Me.PictureBoxStatusConnect.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources.Disconnect
         Me.PictureBoxStatusConnect.Location = New System.Drawing.Point(540, 2)
         Me.PictureBoxStatusConnect.Name = "PictureBoxStatusConnect"
         Me.PictureBoxStatusConnect.Size = New System.Drawing.Size(25, 18)
@@ -1339,6 +1345,39 @@ Partial Class Form1
         Me.PanelAboutUs.Name = "PanelAboutUs"
         Me.PanelAboutUs.Size = New System.Drawing.Size(635, 627)
         Me.PanelAboutUs.TabIndex = 25
+        '
+        'PanelNo
+        '
+        Me.PanelNo.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+            Or System.Windows.Forms.AnchorStyles.Left) _
+            Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.PanelNo.BackColor = System.Drawing.Color.WhiteSmoke
+        Me.PanelNo.Location = New System.Drawing.Point(336, 27)
+        Me.PanelNo.Name = "PanelNo"
+        Me.PanelNo.Size = New System.Drawing.Size(635, 627)
+        Me.PanelNo.TabIndex = 26
+        Me.PanelNo.Visible = False
+        '
+        'Label44
+        '
+        Me.Label44.AutoSize = True
+        Me.Label44.Font = New System.Drawing.Font("Microsoft PhagsPa", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label44.ForeColor = System.Drawing.Color.DimGray
+        Me.Label44.Location = New System.Drawing.Point(136, 483)
+        Me.Label44.Name = "Label44"
+        Me.Label44.Size = New System.Drawing.Size(0, 22)
+        Me.Label44.TabIndex = 27
+        Me.Label44.Visible = False
+        '
+        'PictureBox12
+        '
+        Me.PictureBox12.Location = New System.Drawing.Point(136, 271)
+        Me.PictureBox12.Name = "PictureBox12"
+        Me.PictureBox12.Size = New System.Drawing.Size(392, 206)
+        Me.PictureBox12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox12.TabIndex = 7
+        Me.PictureBox12.TabStop = False
+        Me.PictureBox12.Visible = False
         '
         'Panel10
         '
@@ -1923,7 +1962,7 @@ Partial Class Form1
         Me.ButtonMaximize.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonMaximize.FlatAppearance.BorderSize = 0
         Me.ButtonMaximize.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonMaximize.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._1904665_bar_lines_list_menu_nav_icon__1_
+        Me.ButtonMaximize.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._1904665_bar_lines_list_menu_nav_icon__1_
         Me.ButtonMaximize.Location = New System.Drawing.Point(886, 5)
         Me.ButtonMaximize.Name = "ButtonMaximize"
         Me.ButtonMaximize.Size = New System.Drawing.Size(35, 33)
@@ -1935,7 +1974,7 @@ Partial Class Form1
         Me.ButtonMinimize.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonMinimize.FlatAppearance.BorderSize = 0
         Me.ButtonMinimize.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonMinimize.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._1904666_calculate_close_delete_hide_minimize_icon__1_
+        Me.ButtonMinimize.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._1904666_calculate_close_delete_hide_minimize_icon__1_
         Me.ButtonMinimize.Location = New System.Drawing.Point(845, 5)
         Me.ButtonMinimize.Name = "ButtonMinimize"
         Me.ButtonMinimize.Size = New System.Drawing.Size(35, 33)
@@ -1947,7 +1986,7 @@ Partial Class Form1
         Me.ButtonExit.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.ButtonExit.FlatAppearance.BorderSize = 0
         Me.ButtonExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat
-        Me.ButtonExit.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources._1904654_cancel_close_cross_delete_reject_icon__1_
+        Me.ButtonExit.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources._1904654_cancel_close_cross_delete_reject_icon__1_
         Me.ButtonExit.Location = New System.Drawing.Point(927, 5)
         Me.ButtonExit.Name = "ButtonExit"
         Me.ButtonExit.Size = New System.Drawing.Size(35, 33)
@@ -2145,6 +2184,9 @@ Partial Class Form1
     Friend WithEvents Panel7 As Panel
     Friend WithEvents ButtonAboutUs As Button
     Friend WithEvents PanelAboutUs As Panel
+    Friend WithEvents PanelNo As Panel
+    Friend WithEvents Label44 As Label
+    Friend WithEvents PictureBox12 As PictureBox
     Friend WithEvents Panel8 As Panel
     Friend WithEvents ButtonPrint As Button
     Friend WithEvents PrintDocument1 As Printing.PrintDocument

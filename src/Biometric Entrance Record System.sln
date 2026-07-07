@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Birometric Entrance Record System", "Birometric Entrance Record System\Birometric Entrance Record System.vbproj", "{4EE4C555-7DAC-407B-AA68-42EAE4EA1C09}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Biometric Entrance Record System", "Biometric Entrance Record System\Biometric Entrance Record System.vbproj", "{4EE4C555-7DAC-407B-AA68-42EAE4EA1C09}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Entry Record System", "Entry Record System\Entry Record System.vdproj", "{298D9B86-8EE2-4437-A3CA-308C31391BAA}"
 EndProject

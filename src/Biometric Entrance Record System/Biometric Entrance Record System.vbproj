@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4EE4C555-7DAC-407B-AA68-42EAE4EA1C09}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <StartupObject>Birometric_Entrance_Record_System.My.MyApplication</StartupObject>
-    <RootNamespace>Birometric_Entrance_Record_System</RootNamespace>
-    <AssemblyName>Birometric Entrance Record System</AssemblyName>
+    <StartupObject>Biometric_Entrance_Record_System.My.MyApplication</StartupObject>
+    <RootNamespace>Biometric_Entrance_Record_System</RootNamespace>
+    <AssemblyName>Biometric Entrance Record System</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -22,7 +22,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>Birometric Entrance Record System.xml</DocumentationFile>
+    <DocumentationFile>Biometric Entrance Record System.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,7 +32,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>Birometric Entrance Record System.xml</DocumentationFile>
+    <DocumentationFile>Biometric Entrance Record System.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>

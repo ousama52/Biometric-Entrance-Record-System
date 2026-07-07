@@ -19,8 +19,8 @@ app receives them, matches users, and stores entry records in a MySQL database.
 ```
 .
 ├── src/                                   # VB.NET WinForms desktop application
-│   ├── Birometric Entrance Record System.sln
-│   ├── Birometric Entrance Record System/ # Main WinForms project (net472)
+│   ├── Biometric Entrance Record System.sln
+│   ├── Biometric Entrance Record System/ # Main WinForms project (net472)
 │   │   ├── Form1.vb / .Designer.vb        # Main application window
 │   │   ├── LoadingForm.vb / .Designer.vb  # Splash / loading screen
 │   │   ├── My Project/                    # Assembly info, resources, settings
@@ -41,11 +41,9 @@ app receives them, matches users, and stores entry records in a MySQL database.
 └── README.md
 ```
 
-> **Note on naming:** the solution/project folders retain their original name
-> *"Birometric Entrance Record System"* (a misspelling of *Biometric*). These
-> names are left unchanged because the assembly name, root namespace, and the
-> installer project's references all depend on them — renaming them safely is a
-> separate task from this repository cleanup. See **Known issues** below.
+> **Note on naming:** the VB.NET solution, project, assembly, root namespace and
+> installer references were all corrected from the original misspelling
+> *"Birometric"* to *"Biometric"* and verified with a clean build.
 
 ---
 
@@ -79,18 +77,18 @@ Or import `database/entrancerecord.sql` through phpMyAdmin / MySQL Workbench.
 
 ### 2. Desktop application
 
-Open [`src/Birometric Entrance Record System.sln`](src/) in Visual Studio and
+Open [`src/Biometric Entrance Record System.sln`](src/) in Visual Studio and
 press **F5**, or build from a Developer command prompt:
 
 ```powershell
 # Restore NuGet packages (populates src/packages) then build
-msbuild "src\Birometric Entrance Record System\Birometric Entrance Record System.vbproj" -t:Restore,Build -p:Configuration=Debug
+msbuild "src\Biometric Entrance Record System\Biometric Entrance Record System.vbproj" -t:Restore,Build -p:Configuration=Debug
 ```
 
 The database connection is configured in two places (both currently point at a
 local server with user `root` and an empty password):
 
-- [`src/Birometric Entrance Record System/App.config`](src/) — `connectionString` app setting
+- [`src/Biometric Entrance Record System/App.config`](src/) — `connectionString` app setting
 - `Form1.vb` — an inline `MySqlConnection` string
 
 Update both to match your MySQL/MariaDB credentials.
@@ -112,21 +110,21 @@ Update both to match your MySQL/MariaDB credentials.
 
 ## Known issues
 
-These pre-date this repository cleanup and were intentionally left unchanged so
-that no application behaviour was altered:
-
-- **The VB.NET project does not currently compile.** `Form1.vb` references three
-  controls — `PanelNo`, `Label44`, and `PictureBox12` — that do not exist in
-  `Form1.Designer.vb` (10 `BC30451` errors). These controls appear to have been
-  deleted from the designer without updating the code. They must be re-added to
-  the designer (or the code references removed) before the app will build.
-- **Project name misspelling** (`Birometric` → `Biometric`), see the note above.
 - **Installer project external references:** `Entry Record System.vdproj` points
   at two icon files outside the repository
   (`...\Downloads\911262 (1).ico`, `911262 (2).ico`); provide these locally if
-  you rebuild the installer.
+  you rebuild the installer. The `.vdproj` also cannot be built from the command
+  line — it requires the *Visual Studio Installer Projects* extension.
 - **Hardcoded credentials:** database connection strings are committed in source
   and `App.config`. Move them to per-environment configuration for production.
+
+### Recently fixed
+
+- Restored three controls (`PanelNo`, `Label44`, `PictureBox12`) that were
+  referenced in `Form1.vb` but missing from `Form1.Designer.vb`; the project now
+  compiles cleanly.
+- Corrected the *"Birometric"* → *"Biometric"* misspelling across the solution,
+  project, assembly name and root namespace.
 
 ---
 

@@ -65,7 +65,7 @@ Partial Class LoadingForm
         'PictureBox1
         '
         Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
-        Me.PictureBox1.Image = Global.Birometric_Entrance_Record_System.My.Resources.Resources.DzUd
+        Me.PictureBox1.Image = Global.Biometric_Entrance_Record_System.My.Resources.Resources.DzUd
         Me.PictureBox1.Location = New System.Drawing.Point(12, 579)
         Me.PictureBox1.Name = "PictureBox1"
         Me.PictureBox1.Size = New System.Drawing.Size(54, 60)

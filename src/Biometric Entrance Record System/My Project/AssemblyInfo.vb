@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("Birometric Entrance Record System")>
+<Assembly: AssemblyTitle("Biometric Entrance Record System")>
 <Assembly: AssemblyDescription("")>
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("Birometric Entrance Record System")>
+<Assembly: AssemblyProduct("Biometric Entrance Record System")>
 <Assembly: AssemblyCopyright("Copyright ©  2023")>
 <Assembly: AssemblyTrademark("")>
 

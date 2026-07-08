@@ -2171,6 +2171,7 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(1228, 794)
         Me.Controls.Add(Me.Panel5)
         Me.Controls.Add(Me.PanelContainer)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None
         Me.Margin = New System.Windows.Forms.Padding(4, 3, 4, 3)
         Me.MinimumSize = New System.Drawing.Size(1180, 687)
         Me.Name = "Form1"

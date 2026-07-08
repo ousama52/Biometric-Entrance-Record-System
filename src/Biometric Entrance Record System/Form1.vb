@@ -7,14 +7,14 @@ Imports System.Runtime.InteropServices
 Imports System.Runtime.InteropServices.ComTypes
 Imports System.Threading
 Imports System.Xml
-Imports MySql.Data.MySqlClient
-Imports Mysqlx.XDevAPI.Common
+Imports System.Data.SQLite
 Public Class Form1
-    'server=localhost; user=yout_database_user; password=your_database_password; database=your_database_name
-    Dim Connection As New MySqlConnection("server=localhost; user=root; password=; database=entrancerecord")
-    Dim connectionString As String = "YourConnectionString" ' Replace with your MySQL connection string
-    Dim MySQLCMD As New MySqlCommand
-    Dim MySQLDA As New MySqlDataAdapter
+    ' The database is an embedded SQLite file managed by the Db module.
+    ' No MySQL/SQL server needs to be installed or running.
+    Dim Connection As New SQLiteConnection(Db.ConnectionString)
+    Dim connectionString As String = Db.ConnectionString
+    Dim MySQLCMD As New SQLiteCommand
+    Dim MySQLDA As New SQLiteDataAdapter
     Dim DT As New DataTable
     Dim Dit As New DataTable
     Dim Table_Name As String = "entrancerecord" 'your table name
@@ -25,10 +25,10 @@ Public Class Form1
     Dim StatusInput As String = "Save"
     Dim SqlCmdSearchstr As String
     Public result As String
-    Public Function strstconnection() As MySqlConnection
-        Return New MySqlConnection("server=localhost; user=root; password=; database=entrancerecord")
+    Public Function strstconnection() As SQLiteConnection
+        Return New SQLiteConnection(Db.ConnectionString)
     End Function
-    Public strcon As MySqlConnection = strstconnection()
+    Public strcon As SQLiteConnection = strstconnection()
     Public Shared StrSerialIn As String
     Dim GetID As Boolean = False
     Dim ViewUserData As Boolean = False
@@ -47,6 +47,14 @@ Public Class Form1
         ' This call is required by the designer.
         InitializeComponent()
         ' Add any initialization after the InitializeComponent() call.
+        ' Create the embedded SQLite database (file + tables) on first run so
+        ' the application can be started and tested without any external server.
+        Try
+            Db.EnsureCreated()
+        Catch ex As Exception
+            MessageBox.Show("Could not initialize the local database !!!" & vbCrLf & ex.Message,
+                            "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
         Me.FormBorderStyle = FormBorderStyle.None
         Me.Padding = New Padding(borderSize)
         Me.BackColor = borderColor
@@ -61,6 +69,7 @@ Public Class Form1
         ReleaseCapture()
         SendMessage(Me.Handle, &H112, &HF012, 0)
     End Sub
+    ' ---- Rounded window corners + border ---------------------------------
     Private Function GetRoundedPath(rect As Rectangle, radius As Single) As GraphicsPath
         Dim path As GraphicsPath = New GraphicsPath()
         Dim curveSize As Single = radius * 2.0F
@@ -72,84 +81,29 @@ Public Class Form1
         path.CloseFigure()
         Return path
     End Function
-    Private Sub FormRegionAndBorder(form As Form, radius As Single, graph As Graphics, borderColor As Color, borderSize As Single)
-        If Me.WindowState <> FormWindowState.Minimized Then
-            Using roundPath As GraphicsPath = GetRoundedPath(form.ClientRectangle, radius)
-                Using penBorder As Pen = New Pen(borderColor, borderSize)
-                    Using transform As Matrix = New Matrix()
-                        graph.SmoothingMode = SmoothingMode.AntiAlias
-                        form.Region = New Region(roundPath)
-                        If borderSize >= 1 Then
-                            Dim rect As Rectangle = form.ClientRectangle
-                            Dim scaleX As Single = 1.0F - ((borderSize + 1) / rect.Width)
-                            Dim scaleY As Single = 1.0F - ((borderSize + 1) / rect.Height)
-                            transform.Scale(scaleX, scaleY)
-                            transform.Translate(borderSize / 1.6F, borderSize / 1.6F)
-                            graph.Transform = transform
-                            'graph.DrawPath(penBorder, roundPath)
-                        End If
-                    End Using
-                End Using
+    Private Sub ApplyRoundedRegion()
+        If Me.WindowState = FormWindowState.Minimized Then Return
+        If Me.WindowState = FormWindowState.Maximized Then
+            Me.Region = Nothing
+        Else
+            Using roundPath As GraphicsPath = GetRoundedPath(Me.ClientRectangle, borderRadius)
+                Me.Region = New Region(roundPath)
             End Using
         End If
     End Sub
     Private Sub Form1_Paint(sender As Object, e As PaintEventArgs) Handles Me.Paint
+        ApplyRoundedRegion()
+        If Me.WindowState = FormWindowState.Maximized Then Return
         e.Graphics.SmoothingMode = SmoothingMode.AntiAlias
-        Dim rectForm As Rectangle = Me.ClientRectangle
-        Dim mWidht As Integer = rectForm.Width / 2
-        Dim mHeight As Integer = rectForm.Width / 2
-        ' Dim fbColor = GetFormBoundsColors()
-        DrawPath(rectForm, e.Graphics, Color.Lavender)
-        Dim rectTopRight As New Rectangle(mWidht, rectForm.Y, mWidht, mHeight)
-        DrawPath(rectTopRight, e.Graphics, Color.Lavender)
-        Dim rectBottomLeft As New Rectangle(rectForm.X, rectForm.X + mHeight, mWidht, mHeight)
-        DrawPath(rectBottomLeft, e.Graphics, Color.Lavender)
-        Dim rectBottomRight As New Rectangle(mWidht, rectForm.Y + mHeight, mWidht, mHeight)
-        DrawPath(rectBottomLeft, e.Graphics, Color.Lavender)
-        FormRegionAndBorder(Me, borderRadius, e.Graphics, borderColor, borderSize)
-    End Sub
-    Private Sub DrawPath(rectForm As Rectangle, graphics As Graphics, color As Color)
-        Using roundPath As GraphicsPath = GetRoundedPath(rectForm, borderRadius)
-            Using penBorder As Pen = New Pen(color, 3)
-                graphics.DrawPath(penBorder, roundPath)
+        Dim rect As Rectangle = Me.ClientRectangle
+        rect.Inflate(-1, -1)
+        Using roundPath As GraphicsPath = GetRoundedPath(rect, borderRadius)
+            Using penBorder As New Pen(borderColor, borderSize)
+                penBorder.Alignment = PenAlignment.Inset
+                e.Graphics.DrawPath(penBorder, roundPath)
             End Using
         End Using
     End Sub
-    Private Structure FormBoundsColors
-        Public TopLeftColor As Color
-        Public TopRightColor As Color
-        Public BottomLeftColor As Color
-        Public BottomRightColor As Color
-    End Structure
-    Private Function GetFormBoundsColors() As FormBoundsColors
-        Dim fbColor = New FormBoundsColors()
-        Using bmp = New Bitmap(1, 1)
-            Using graph As Graphics = Graphics.FromImage(bmp)
-                Dim rectBmp As New Rectangle(0, 0, 1, 1)
-                'Top Left
-                rectBmp.X = Me.Bounds.X - 1
-                rectBmp.Y = Me.Bounds.Y
-                graph.CopyFromScreen(rectBmp.Location, Point.Empty, rectBmp.Size)
-                fbColor.TopLeftColor = bmp.GetPixel(0, 0)
-                'Top Right
-                rectBmp.X = Me.Bounds.Right
-                rectBmp.Y = Me.Bounds.Y
-                graph.CopyFromScreen(rectBmp.Location, Point.Empty, rectBmp.Size)
-                fbColor.TopRightColor = bmp.GetPixel(0, 0)
-                'Bottom Left
-                rectBmp.X = Me.Bounds.X
-                rectBmp.Y = Me.Bounds.Bottom
-                graph.CopyFromScreen(rectBmp.Location, Point.Empty, rectBmp.Size)
-                fbColor.BottomLeftColor = bmp.GetPixel(0, 0)
-                'Bottom Right
-                rectBmp.X = Me.Bounds.Right
-                rectBmp.Y = Me.Bounds.Bottom
-                graph.CopyFromScreen(rectBmp.Location, Point.Empty, rectBmp.Size)
-                fbColor.BottomRightColor = bmp.GetPixel(0, 0)
-            End Using
-        End Using
-        Return fbColor
-    End Function
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.CenterToScreen()
         PanelConnection.Visible = True
@@ -161,6 +115,7 @@ Public Class Form1
         PanelDate.Visible = False
         PanelNo.Visible = False
         ComboBoxBaudRate.SelectedIndex = 3
+        LabelDateTime.Text = DateTime.Now.ToString("yyyy-MM-dd")
         ShowData()
     End Sub
     Private Sub ShowData()
@@ -174,7 +129,7 @@ Public Class Form1
             If LoadImagesStr = False Then
                 MySQLCMD.CommandType = CommandType.Text
                 MySQLCMD.CommandText = "SELECT Name, ID, NRC, Email, Roll , Rank FROM " & Table_Name & " ORDER BY Name"
-                MySQLDA = New MySqlDataAdapter(MySQLCMD.CommandText, Connection)
+                MySQLDA = New SQLiteDataAdapter(MySQLCMD.CommandText, Connection)
                 DT = New DataTable
                 Data = MySQLDA.Fill(DT)
                 If Data > 0 Then
@@ -189,7 +144,7 @@ Public Class Form1
             Else
                 MySQLCMD.CommandType = CommandType.Text
                 MySQLCMD.CommandText = "SELECT Images FROM " & Table_Name & " WHERE ID LIKE '" & IDRam & "'"
-                MySQLDA = New MySqlDataAdapter(MySQLCMD.CommandText, Connection)
+                MySQLDA = New SQLiteDataAdapter(MySQLCMD.CommandText, Connection)
                 DT = New DataTable
                 Data = MySQLDA.Fill(DT)
                 If Data > 0 Then
@@ -219,7 +174,7 @@ Public Class Form1
         Try
             MySQLCMD.CommandType = CommandType.Text
             MySQLCMD.CommandText = "SELECT * FROM " & Table_Name & " WHERE ID LIKE '" & LabelID.Text.Substring(5, LabelID.Text.Length - 5) & "'"
-            MySQLDA = New MySqlDataAdapter(MySQLCMD.CommandText, Connection)
+            MySQLDA = New SQLiteDataAdapter(MySQLCMD.CommandText, Connection)
             DT = New DataTable
             Data = MySQLDA.Fill(DT)
             If Data > 0 Then
@@ -264,20 +219,21 @@ Public Class Form1
         PanelNo.Visible = False
     End Sub
     Private Sub ButtonUserData_Click(sender As Object, e As EventArgs) Handles ButtonUserData.Click
+        ' The User Data panel is always available. If the fingerprint device is
+        ' not connected we only warn the user (non-blocking); automatic scanning
+        ' is unavailable, but the panel still opens and works normally.
         If TimerSerialIn.Enabled = False Then
-            MsgBox("Failed to open User Data !!!" & vbCr & "Click the Connection menu then click the Connect button.", MsgBoxStyle.Information, "Information")
-            Return
-        Else
-            StrSerialIn = ""
-            ViewUserData = True
-            PanelRegisterationandEditUserData.Visible = False
-            PanelConnection.Visible = False
-            PanelUserData.Visible = True
-            PanelRecord.Visible = False
-            PanelReport.Visible = False
-            PanelAboutUs.Visible = False
-            PanelNo.Visible = False
+            MsgBox("Device not connected." & vbCr & "Fingerprint scanning is unavailable until you connect from the Connection menu.", MsgBoxStyle.Exclamation, "Warning")
         End If
+        StrSerialIn = ""
+        ViewUserData = True
+        PanelRegisterationandEditUserData.Visible = False
+        PanelConnection.Visible = False
+        PanelUserData.Visible = True
+        PanelRecord.Visible = False
+        PanelReport.Visible = False
+        PanelAboutUs.Visible = False
+        PanelNo.Visible = False
     End Sub
     Private Sub ButtonRecord_Click(sender As Object, e As EventArgs) Handles ButtonRecord.Click
         PanelRegisterationandEditUserData.Visible = False
@@ -451,9 +407,9 @@ Public Class Form1
                 Return
             End Try
             Try
-                MySQLCMD = New MySqlCommand
+                MySQLCMD = New SQLiteCommand
                 With MySQLCMD
-                    .CommandText = "INSERT INTO " & Table_Name & " (Name, ID, NRC, Email, Roll, Rank, Images) VALUES (@name, @ID, @NRC, @email, @roll, @rank, @images)"
+                    .CommandText = "INSERT INTO " & Table_Name & " (Name, ID, NRC, Email, Roll, Rank, Images) VALUES (@name, @id, @NRC, @email, @roll, @rank, @images)"
                     .Connection = Connection
                     .Parameters.AddWithValue("@name", TextBoxName.Text)
                     .Parameters.AddWithValue("@id", LabelGetID.Text)
@@ -484,14 +440,14 @@ Public Class Form1
                     Return
                 End Try
                 Try
-                    MySQLCMD = New MySqlCommand
+                    MySQLCMD = New SQLiteCommand
                     With MySQLCMD
                         .CommandText = "UPDATE " & Table_Name & " SET  Name=@name,ID=@id,NRC=@NRC,Email=@email,Roll=@roll,Rank=@rank,Images=@images WHERE ID=@id "
                         .Connection = Connection
                         .Parameters.AddWithValue("@name", TextBoxName.Text)
                         .Parameters.AddWithValue("@id", LabelGetID.Text)
                         .Parameters.AddWithValue("@NRC", TextBoxNRCNo.Text)
-                        .Parameters.AddWithValue("@mail", TextBoxContact.Text)
+                        .Parameters.AddWithValue("@email", TextBoxContact.Text)
                         .Parameters.AddWithValue("@roll", TextBoxRoll.Text)
                         .Parameters.AddWithValue("@rank", TextBoxRank.Text)
                         .Parameters.AddWithValue("@images", arrImage)
@@ -515,7 +471,7 @@ Public Class Form1
                     Return
                 End Try
                 Try
-                    MySQLCMD = New MySqlCommand
+                    MySQLCMD = New SQLiteCommand
                     With MySQLCMD
                         .CommandText = "UPDATE " & Table_Name & " SET  Name=@name,ID=@id,NRC=@NRC,Email=@email,Roll=@roll,Rank=@rank WHERE ID=@id "
                         .Connection = Connection
@@ -563,7 +519,7 @@ Public Class Form1
             GetID = True
             ButtonScanID.Enabled = False
         Else
-            MsgBox("Failed to open User Data !!!" & vbCr & "Click the Connection menu then click the Connect button.", MsgBoxStyle.Critical, "Error Message")
+            MsgBox("Device not connected." & vbCr & "Connect the fingerprint device from the Connection menu to scan an ID.", MsgBoxStyle.Exclamation, "Warning")
         End If
     End Sub
     Private Sub ButtonScanID_MouseHover(sender As Object, e As EventArgs) Handles ButtonScanID.MouseHover
@@ -620,7 +576,7 @@ Public Class Form1
             Return
         End Try
         Try
-            MySQLDA = New MySqlDataAdapter(SqlCmdSearchstr, Connection)
+            MySQLDA = New SQLiteDataAdapter(SqlCmdSearchstr, Connection)
             DT = New DataTable
             Data = MySQLDA.Fill(DT)
             If Data > 0 Then
@@ -661,7 +617,7 @@ Public Class Form1
         AllCellsSelected = (DataGridView1.SelectedCells.Count = (DataGridView1.RowCount * DataGridView1.Columns.GetColumnCount(DataGridViewElementStates.Visible)))
     End Function
     Private Sub TimerTimeDate_Tick(sender As Object, e As EventArgs) Handles TimerTimeDate.Tick
-        LabelDateTime.Text = DateTime.Now.ToString("yyyy/M/d")
+        LabelDateTime.Text = DateTime.Now.ToString("yyyy-MM-dd")
     End Sub
     Private Sub DeleteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteToolStripMenuItem.Click
         If DataGridView1.RowCount = 0 Then
@@ -760,7 +716,7 @@ Public Class Form1
         Try
             MySQLCMD.CommandType = CommandType.Text
             MySQLCMD.CommandText = "SELECT * FROM entrancerecord WHERE ID LIKE '" & LabelGetID.Text & "'"
-            MySQLDA = New MySqlDataAdapter(MySQLCMD.CommandText, Connection)
+            MySQLDA = New SQLiteDataAdapter(MySQLCMD.CommandText, Connection)
             DT = New DataTable
             Data = MySQLDA.Fill(DT)
             If Data > 0 Then
@@ -873,36 +829,32 @@ Public Class Form1
         End If
     End Sub
     Public Sub reload(ByVal sql As String, ByVal DTA As Object)
+        ' Use a local adapter with its own command. SQLiteDataAdapter.Dispose()
+        ' also disposes its SelectCommand, so we must NOT hand it the shared
+        ' MySQLCMD (doing so would dispose the command the rest of the form reuses).
         Try
             strcon.Open()
             Dit = New DataTable
-            With MySQLCMD
-                .Connection = strcon
-                .CommandText = sql
-            End With
-            MySQLDA.SelectCommand = MySQLCMD
-            MySQLDA.Fill(Dit)
+            Using da As New SQLiteDataAdapter(sql, strcon)
+                da.Fill(Dit)
+            End Using
             DTA.DataSource = Dit
         Catch ex As Exception
         Finally
             strcon.Close()
-            MySQLDA.Dispose()
         End Try
     End Sub
     Public Sub reloadtxt(ByVal sql As String)
+        ' Local adapter only (see reload) so the shared MySQLCMD is never disposed.
         Try
             strcon.Open()
-            With MySQLCMD
-                .Connection = strcon
-                .CommandText = sql
-            End With
             Dit = New DataTable
-            MySQLDA = New MySqlDataAdapter(sql, strcon)
-            MySQLDA.Fill(Dit)
+            Using da As New SQLiteDataAdapter(sql, strcon)
+                da.Fill(Dit)
+            End Using
         Catch ex As Exception
         Finally
             strcon.Close()
-            MySQLDA.Dispose()
         End Try
     End Sub
     Public Sub createLogged(ByVal sql As String)
@@ -999,7 +951,7 @@ Public Class Form1
     Private Sub btnDaily_Click(sender As Object, e As EventArgs) Handles btnDaily.Click
         If CheckBoxAll.Checked = True Then
             Try
-                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE DATE(Date)=CURDATE();"
+                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE Date = date('now','localtime');"
                 reload(sql, DataGridView3)
                 DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             Catch ex As Exception
@@ -1007,7 +959,7 @@ Public Class Form1
         End If
         If CheckBoxTeacher.Checked = True Then
             Try
-                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE DATE(Date)=CURDATE() AND entrancerecord.Rank <> 'Student';"
+                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE Date = date('now','localtime') AND entrancerecord.Rank <> 'Student';"
                 reload(sql, DataGridView3)
                 DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             Catch ex As Exception
@@ -1015,7 +967,7 @@ Public Class Form1
         End If
         If CheckBoxStudent.Checked = True Then
             Try
-                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE DATE(Date)=CURDATE() AND entrancerecord.Rank = 'Student';"
+                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE Date = date('now','localtime') AND entrancerecord.Rank = 'Student';"
                 reload(sql, DataGridView3)
                 DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             Catch ex As Exception
@@ -1025,7 +977,7 @@ Public Class Form1
     Private Sub btnWeekly_Click(sender As Object, e As EventArgs) Handles btnWeekly.Click
         If CheckBoxAll.Checked = True Then
             Try
-                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE WEEK(Date)=WEEK(NOW());"
+                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE strftime('%Y-%W', Date) = strftime('%Y-%W','now','localtime');"
                 reload(sql, DataGridView3)
                 DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             Catch ex As Exception
@@ -1033,7 +985,7 @@ Public Class Form1
         End If
         If CheckBoxTeacher.Checked = True Then
                 Try
-                    Dim sql As String = "SELECT Name, Roll, Rank, Email, NRC, Date, TimeIn, TimeOut FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE WEEK(Date)=WEEK(NOW()) AND entrancerecord.Rank <> 'Student';"
+                    Dim sql As String = "SELECT Name, Roll, Rank, Email, NRC, Date, TimeIn, TimeOut FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE strftime('%Y-%W', Date) = strftime('%Y-%W','now','localtime') AND entrancerecord.Rank <> 'Student';"
                     reload(sql, DataGridView3)
                     DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
                 Catch ex As Exception
@@ -1041,7 +993,7 @@ Public Class Form1
             End If
             If CheckBoxStudent.Checked = True Then
                 Try
-                    Dim sql As String = "SELECT Name, Roll, Rank, Email, NRC, Date, TimeIn, TimeOut FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE WEEK(Date)=WEEK(NOW()) AND entrancerecord.Rank = 'Student';"
+                    Dim sql As String = "SELECT Name, Roll, Rank, Email, NRC, Date, TimeIn, TimeOut FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE strftime('%Y-%W', Date) = strftime('%Y-%W','now','localtime') AND entrancerecord.Rank = 'Student';"
                     reload(sql, DataGridView3)
                     DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
                 Catch ex As Exception
@@ -1052,7 +1004,7 @@ Public Class Form1
     Private Sub btnMonthly_Click(sender As Object, e As EventArgs) Handles btnMonthly.Click
         If CheckBoxAll.Checked = True Then
             Try
-                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE MONTH(Date)=MONTH(NOW());"
+                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE strftime('%Y-%m', Date) = strftime('%Y-%m','now','localtime');"
                 reload(sql, DataGridView3)
                 DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             Catch ex As Exception
@@ -1060,7 +1012,7 @@ Public Class Form1
         End If
         If CheckBoxTeacher.Checked = True Then
             Try
-                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE MONTH(Date)=MONTH(NOW()) AND entrancerecord.Rank <> 'Student';"
+                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE strftime('%Y-%m', Date) = strftime('%Y-%m','now','localtime') AND entrancerecord.Rank <> 'Student';"
                 reload(sql, DataGridView3)
                 DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             Catch ex As Exception
@@ -1068,7 +1020,7 @@ Public Class Form1
         End If
         If CheckBoxStudent.Checked = True Then
             Try
-                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE MONTH(Date)=MONTH(NOW()) AND entrancerecord.Rank = 'Student';"
+                Dim sql As String = "SELECT  Name, Roll, Rank, Email, NRC,  Date, TimeIn,  TimeOut  FROM recordtable JOIN entrancerecord ON recordtable.ID = entrancerecord.ID WHERE strftime('%Y-%m', Date) = strftime('%Y-%m','now','localtime') AND entrancerecord.Rank = 'Student';"
                 reload(sql, DataGridView3)
                 DataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
             Catch ex As Exception
